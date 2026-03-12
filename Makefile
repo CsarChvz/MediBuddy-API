@@ -32,7 +32,8 @@ dev: install
 run: install
 	$(VENV_DIR)/bin/uvicorn app.main:app --port 8000
 
-
+run-dev:
+	$(VENV_DIR)/bin/uvicorn app.main:app --reload --port 8000
 
 docker-build:
 	docker build --platform linux/amd64 --provenance=false \
