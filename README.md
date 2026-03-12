@@ -128,6 +128,7 @@ LAMBDA_NAME=fastapi_aws_lambda
 
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
+DEV_DATABASE_URL=postgresql+pyscopg2://postgres:postgres@127.0.0.1:5433/medibuddy
 
 ```
 
