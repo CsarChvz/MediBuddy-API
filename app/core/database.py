@@ -1,7 +1,10 @@
 import os
 
+from dotenv import load_dotenv  # <--- Agrega esto
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+
+load_dotenv()
 
 DEV_DATABASE_URL = os.getenv("DEV_DATABASE_URL")
 
