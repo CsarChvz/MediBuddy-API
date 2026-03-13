@@ -80,6 +80,9 @@ def run_migrations_online_old() -> None:
             context.run_migrations()
 
 
+## ---------------------- Asyncpg
+
+
 def do_run_migrations(connection):
     context.configure(connection=connection, target_metadata=target_metadata)
 
