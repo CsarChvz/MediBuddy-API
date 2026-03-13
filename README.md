@@ -49,6 +49,8 @@ ECR_REPO=fastapi-aws-lambda
 IMAGE_TAG=latest
 LAMBDA_MEMORY=512  # Lambda memory size in MB
 LAMBDA_TIMEOUT=30  # Lambda timeout in seconds
+
+DEV_DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:5433/medibuddy
 ```
 
 Deploy (builds the image, pushes to ECR, applies Terraform):
@@ -128,7 +130,7 @@ LAMBDA_NAME=fastapi_aws_lambda
 
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
-DEV_DATABASE_URL=postgresql+psycopg2://postgres:postgres@127.0.0.1:5433/medibuddy
+DEV_DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:5433/medibuddy
 
 ```
 
