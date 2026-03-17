@@ -2,9 +2,12 @@ alembic==1.18.4
 annotated-doc==0.0.4
 annotated-types==0.7.0
 anyio==4.12.1
+asyncpg==0.31.0
 certifi==2026.2.25
+charset-normalizer==3.4.6
 click==8.3.1
 dnspython==2.8.0
+docker==7.1.0
 email-validator==2.3.0
 fastapi==0.111.0
 fastapi-cli==0.0.24
@@ -34,6 +37,7 @@ pytest-alembic==0.12.1
 python-dotenv==1.0.1
 python-multipart==0.0.22
 PyYAML==6.0.3
+requests==2.32.5
 rich==14.3.3
 rich-toolkit==0.19.7
 shellingham==1.5.4
@@ -42,6 +46,7 @@ starlette==0.37.2
 typer==0.24.1
 typing_extensions==4.15.0
 ujson==5.12.0
+urllib3==2.6.3
 uvicorn==0.30.1
 uvloop==0.22.1
 watchfiles==1.1.1
