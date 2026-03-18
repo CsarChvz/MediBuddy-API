@@ -20,7 +20,7 @@ def start_database_container():
 
     container_config = {
         "name": container_name,
-        "image": "postgres:16.1-alpine3.12",
+        "image": "postgres:16.1-alpine3.19",
         "detach": True,
         "ports": {"5432": "5434"},
         "environment": {
