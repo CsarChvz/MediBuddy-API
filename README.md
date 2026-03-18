@@ -1,6 +1,6 @@
 # FastAPI on AWS Lambda (Terraform + ECR Image)
 
-A simple, extensible FastAPI scaffold designed for AWS Lambda behind API Gatewayc,deployed as a container image in ECR. Terraform manages the infra, Mangum adapts ASGI to Lambda.
+A simple, extensible FastAPI scaffold designed for AWS Lambda behind API Gateway, deployed as a container image in ECR. Terraform manages the infra, Mangum adapts ASGI to Lambda.
 
 ## Features
 - Service/Repository project layout
@@ -8,10 +8,11 @@ A simple, extensible FastAPI scaffold designed for AWS Lambda behind API Gateway
 - ECR container image support (bypass Lambda ZIP size limits, include native libs)
 - Mangum to bridge ASGI to Lambda
 - .env config via pydantic-settings + python-dotenv
+- Blazing fast dependency management using `uv`
 - Easy to extend (add SQS, DB, multiple Lambdas)
 
 ## Project Structure
-```
+```text
 app/
   api/
     routes.py
@@ -38,9 +39,9 @@ terraform/
 
 ## Quickstart (one command deploy)
 
-Prereqs: AWS CLI configured, Terraform >= 1.6, Docker. Set your `.env` values to drive the deploy (fallback defaults are provided):
+Prereqs: AWS CLI configured, Terraform >= 1.6, Docker, and [uv](https://docs.astral.sh/uv/) installed. Set your `.env` values to drive the deploy (fallback defaults are provided):
 
-```
+```env
 # .env
 AWS_REGION=us-east-1
 STAGE=dev
@@ -56,42 +57,51 @@ TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5434/medibuddy
 
 Deploy (builds the image, pushes to ECR, applies Terraform):
 
-```
+```bash
 make deploy
 ```
 
 Manual override (optional):
 
-```
+```bash
 make deploy AWS_REGION=us-east-1 STAGE=dev LAMBDA_NAME=my-func ECR_REPO=my-repo IMAGE_TAG=v1
 ```
 
 The `api_endpoint` will be printed. Test it:
 
-```
+```bash
 curl "$API_ENDPOINT/"
 ```
 
 ## Local development
 
-Use a local virtual environment (recommended):
+We use **`uv`** for lightning-fast virtual environment creation and dependency installation:
 
-```
-python -m venv .venv
+```bash
+# 1. Create a virtual environment using uv
+uv venv
+
+# 2. Activate it
 source .venv/bin/activate
-pip install -r requirements.txt
+
+# 3. Install dependencies from requirements.txt instantly
+uv pip install -r requirements.txt
+
+# 4. Run the local server
 uvicorn app.main:app --reload --port 8000
 ```
 
+*(Note: If you migrated the project to use `pyproject.toml`, you can simply run `uv sync` instead of the pip install command).*
+
 Or via Makefile (auto-creates .venv and installs):
 
-```
+```bash
 make dev
 ```
 
 Or with Docker (uses the `dev` stage):
 
-```
+```bash
 make docker-run
 ```
 
@@ -101,17 +111,15 @@ Visit http://localhost:8000/ and http://localhost:8000/docs
 
 One command (uses `.env`):
 
-```
+```bash
 make destroy-all
 ```
 
 Manual override:
 
-```
+```bash
 make destroy-all AWS_REGION=us-east-1 STAGE=dev LAMBDA_NAME=my-func ECR_REPO=my-repo IMAGE_TAG=v1
 ```
-
-<!-- ZIP-based deployment removed; this project deploys Lambda from an ECR image only. -->
 
 ## Extensibility
 - Add new endpoints under `app/api`
@@ -122,8 +130,7 @@ make destroy-all AWS_REGION=us-east-1 STAGE=dev LAMBDA_NAME=my-func ECR_REPO=my-
 ## Environment
 `.env` controls runtime defaults; Terraform also passes the key ones into Lambda.
 
-```
-
+```env
 APP_ENV=dev
 STAGE=dev
 AWS_REGION=us-east-1
@@ -131,11 +138,11 @@ LAMBDA_NAME=fastapi_aws_lambda
 
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
-DEV_DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:5433/medibuddy
-
+# Notice we use standard synchronous postgresql:// now!
+DEV_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5433/medibuddy
 ```
 
 ## Notes
-- Lambda runtime is Python 3.12 for both the base image. Keep native wheels compatible.
-- Minimal dependencies purposely kept small
-- Swap to Poetry easily by adding `pyproject.toml`
+- Lambda runtime is Python 3.12 for the base image. Keep native wheels compatible.
+- Minimal dependencies purposely kept small.
+- The project currently uses `requirements.txt`, but it is fully ready to be migrated to a modern `pyproject.toml` workflow using `uv init`.
