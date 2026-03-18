@@ -50,7 +50,8 @@ IMAGE_TAG=latest
 LAMBDA_MEMORY=512  # Lambda memory size in MB
 LAMBDA_TIMEOUT=30  # Lambda timeout in seconds
 
-DEV_DATABASE_URL=postgresql+asyncpg://postgres:postgres@127.0.0.1:5433/medibuddy
+DEV_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5433/medibuddy
+TEST_DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:5434/medibuddy
 ```
 
 Deploy (builds the image, pushes to ECR, applies Terraform):
